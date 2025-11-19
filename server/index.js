@@ -1,8 +1,8 @@
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const validUrl = require('valid-url');
+const path = require('path');
 const { ensureDatabaseAndTable } = require('./db');
 
 const app = express();
@@ -28,7 +28,7 @@ let pool;
 
 })();
 
-// Helpers
+// Query helper
 async function query(text, params) {
   const client = await pool.connect();
   try {
@@ -83,10 +83,12 @@ app.post('/api/links', async (req, res) => {
   }
 });
 
-// Get
+// Get all
 app.get('/api/links', async (_req, res) => {
   try {
-    const result = await query('SELECT code, url, clicks, lastclicked AS "lastClicked", createdat AS "createdAt" FROM links ORDER BY createdat DESC', []);
+    const result = await query(
+      'SELECT code, url, clicks, lastclicked AS "lastClicked", createdat AS "createdAt" FROM links ORDER BY createdat DESC'
+    );
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -120,7 +122,7 @@ app.delete('/api/links/:code', async (req, res) => {
   }
 });
 
-// Redirect handler
+// Redirect
 app.get('/:code', async (req, res, next) => {
   const { code } = req.params;
   if (code === 'api' || code === 'healthz') return next();
@@ -136,6 +138,13 @@ app.get('/:code', async (req, res, next) => {
     console.error(err);
     res.status(500).send('Server error');
   }
+});
+
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+app.get('*', (req, res, next) => {
+  if (req.url.startsWith('/api') || req.url.startsWith('/healthz')) return next();
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 app.listen(PORT, () => console.log(`Server running on ${BASE_URL}`));
