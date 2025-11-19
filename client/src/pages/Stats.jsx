@@ -11,7 +11,7 @@ import {
   FileText,
 } from 'lucide-react';
 
-const BASE_URL = import.meta.env.VITE_FRONTEND_BASE || 'https://tinylink-u0zg.onrender.com';
+const BASE_URL = 'https://tinylink-u0zg.onrender.com';
 
 
 const StatCard = ({ label, value, icon, color, bgColor }) => (
@@ -34,6 +34,8 @@ export default function Stats() {
   const [copiedTarget, setCopiedTarget] = useState(false);
 
   const shortUrl = `${BASE_URL}/${code}`;
+
+  console.log("shortUrl: ", shortUrl);
 
   const handleCopy = async (text, type) => {
     try {
