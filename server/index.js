@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const validUrl = require('valid-url');
 const { ensureDatabaseAndTable } = require('./db');
+var path = require('path');
 
 const app = express();
 app.use(cors());
