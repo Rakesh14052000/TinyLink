@@ -14,10 +14,26 @@ export default function Dashboard() {
   const fetchLinks = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/links`);
+
+      if (!res.ok) {
+        console.error('API returned HTTP error:', res.status);
+        setLinks([]);
+        return;
+      }
+
       const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        console.error('API returned non-array data:', data);
+        setLinks([]);
+        return;
+      }
+
       setLinks(data);
+
     } catch (err) {
       console.error('Fetch error:', err);
+      setLinks([]); // fail-safe
     }
   };
 
@@ -136,8 +152,7 @@ export default function Dashboard() {
           </div>
 
           <div className="overflow-x-auto">
-
-            <table className="w-full ">
+            <table className="w-full">
               <thead className="bg-black/5">
                 <tr className="text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
                   <th className="p-5">Short Link</th>
@@ -157,13 +172,18 @@ export default function Dashboard() {
                   </tr>
                 ) : (
                   links.map((link) => (
-                    <LinkRow key={link.code} link={link} onDelete={() => handleDelete(link.code)} />
+                    <LinkRow
+                      key={link.code}
+                      link={link}
+                      onDelete={() => handleDelete(link.code)}
+                    />
                   ))
                 )}
               </tbody>
             </table>
           </div>
         </div>
+
       </div>
     </div>
   );
