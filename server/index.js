@@ -138,13 +138,14 @@ app.get('/:code', async (req, res, next) => {
   }
 });
 
+
+
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+app.get('*', (req, res, next) => {
+  if (req.url.startsWith('/api') || req.url.startsWith('/healthz')) return next();
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
+
+
 app.listen(PORT, () => console.log(`Server running on ${BASE_URL}`));
-
-
-// app.use(express.static(path.join(__dirname, '../client/dist')));
-
-// app.get('*', (req, res, next) => {
-//   if (req.url.startsWith('/api') || req.url.startsWith('/healthz')) return next();
-//   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-// });
-
