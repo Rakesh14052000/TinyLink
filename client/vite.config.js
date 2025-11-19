@@ -7,8 +7,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': 'http://localhost:5000',
-      '/healthz': 'http://localhost:5000'
+      '/api': 'https://tinylink-u0zg.onrender.com',
+      '/healthz': 'https://tinylink-u0zg.onrender.com'
     }
   }
 })
