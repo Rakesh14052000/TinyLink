@@ -35,7 +35,7 @@ export default function Stats() {
 
   const shortUrl = `${BASE_URL}/${code}`;
 
-  console.log("shortUrl: ", shortUrl);
+  // console.log("shortUrl: ", shortUrl);
 
   const handleCopy = async (text, type) => {
     try {
@@ -54,7 +54,7 @@ export default function Stats() {
 
   const fetchLink = async () => {
     try {
-      const res = await fetch(`/api/links/${code}`);
+      const res = await fetch(`${BASE_URL}/api/links/${code}`);
       if (!res.ok) {
         setErr('Link not found');
         return;
