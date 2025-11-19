@@ -11,7 +11,7 @@ import {
   FileText,
 } from 'lucide-react';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://tinylink-u0zg.onrender.com';
 
 
 const StatCard = ({ label, value, icon, color, bgColor }) => (

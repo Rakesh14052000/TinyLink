@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Copy, Check, Trash2, BarChart3 } from 'lucide-react';
 import { Link as RouterLink } from 'react-router-dom';
 
-const FRONTEND_BASE = import.meta.env.VITE_FRONTEND_BASE || 'http://localhost:3000';
+const FRONTEND_BASE = import.meta.env.VITE_FRONTEND_BASE || 'https://tinylink-u0zg.onrender.com';
 
 export default function LinkRow({ link, onDelete }) {
   const [copied, setCopied] = useState(false);
