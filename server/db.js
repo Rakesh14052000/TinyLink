@@ -1,27 +1,15 @@
-const { Pool, Client } = require('pg');
+const { Pool } = require('pg');
 require('dotenv').config();
-
 
 async function ensureDatabaseAndTable() {
   try {
-    const client = new Client({
-      connectionString: process.env.DATABASE_URL.replace(process.env.DATABASE_NAME, 'postgres'),
-    });
-    await client.connect();
-
-    const dbExists = await client.query(`SELECT 1 FROM pg_database WHERE datname=$1`, [process.env.DATABASE_NAME]);
-    if (dbExists.rowCount === 0) {
-      await client.query(`CREATE DATABASE ${process.env.DATABASE_NAME}`);
-      console.log(`Database "${process.env.DATABASE_NAME}" created`);
-    }
-    await client.end();
-
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
     });
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS ${process.env.TABLE_NAME} (
+      CREATE TABLE IF NOT EXISTS links (
         id SERIAL PRIMARY KEY,
         code VARCHAR(8) UNIQUE NOT NULL,
         url TEXT NOT NULL,
@@ -31,10 +19,11 @@ async function ensureDatabaseAndTable() {
       );
     `);
 
-    console.log(`Table "${process.env.TABLE_NAME}" is created`);
+    console.log(`Table "links" is created`);
+
     return pool;
   } catch (err) {
-    console.error('DB  Error:', err);
+    console.error("DB Error:", err);
     process.exit(1);
   }
 }
